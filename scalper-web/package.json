@@ -1,0 +1,12 @@
+{
+  "name": "scalper-web",
+  "version": "1.0.0",
+  "description": "Trade platform",
+  "main": "index.ts",
+  "author": "Roman Perminov <broken_mouse@mail.ru>",
+  "license": "MIT",
+  "dependencies": {
+    "typescript": "^5.8.3",
+    "reflect-metadata": "^0.1.13"
+  }
+}
