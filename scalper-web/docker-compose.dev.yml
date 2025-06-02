@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  scalper-web-service:
+    build:
+      context: .
+      dockerfile: Dockerfiles/Dockerfile.scalper
+    command: /bin/ash -c "cd /app && ls && yarn && yarn start"
+    container_name: scalper-web-service.dev
+    environment:
+      TZ: "Asia/Irkutsk"
+    volumes:
+      - ./:/app
+    ports:
+      - "3000:3000"

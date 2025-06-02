@@ -1,0 +1,19 @@
+.cellPlaned {
+    background-color: #ffffff;
+    color: yellow;
+}
+
+.cellDone {
+    background-color: #b2b2b2;
+    color: yellow;
+}
+
+.cellOpen {
+    background-color: #00b050;
+    /*background-color: #47d8fa;*/
+}
+
+.cellShowPlaned {
+    background-color: #0070c0;
+    color: yellow;
+}
