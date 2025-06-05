@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useRef} from "react";
 import {
     Box,
     Button,
@@ -86,7 +86,8 @@ export default function TradeSecurityFunc(props:Props)
                     {props.tradesSecurity.map(tradeSecurity => (
                         <Tab
                             label={tradeSecurity.id}
-                            {...allyProps(tradeSecurity.id)}
+                            id={`simple-tab-${tradeSecurity.id}`}
+                            aria-controls={`simple-tabpanel-${tradeSecurity.id}`}
                         />
                     ))}
                 </Tabs>

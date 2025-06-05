@@ -1,58 +1,77 @@
-import React, {useEffect, useRef, useState} from "react";
-import {Box, Button, ButtonGroup, TableCell} from "@mui/material";
+import React from "react";
+import {Button, ButtonGroup, TableCell, Tooltip} from "@mui/material";
 import {Application, AppStatus, TradeSecurity} from "../../store/model/Model";
 import {
     styleCellDone,
     styleCellOpenPlanned,
     styleCellOpenToOpen
 } from "./FieldStyles";
+import OpenWithIcon from '@mui/icons-material/OpenWith';
+import {right} from "@popperjs/core";
+import AppStore from "../../store/AppStore";
+import {inject, observer} from "mobx-react";
 
 interface Props {
     tradeSecurity: TradeSecurity;
-    row: Application
+    row: Application,
 }
 
-export default function ByField (props: Props)
+interface PropsFunc extends Props{
+    openApplication: () => void
+}
+
+interface InjectedProps extends Props {
+    store: AppStore;
+}
+
+@inject("store")
+@observer
+export default class ByField extends React.Component<Props, any>
+{
+    get injected() {
+        return this.props as InjectedProps
+    }
+
+    openApplication = async () => {
+        const { tradeSecurity, row, store } = this.injected;
+        console.log("open application");
+
+        await store.openApplication(tradeSecurity.id, row.id);
+    }
+
+    render() {
+        const {tradeSecurity, row} = this.injected;
+
+        return (
+            <ByFieldFunc
+                tradeSecurity={tradeSecurity}
+                row={row}
+                openApplication={() => this.openApplication()}/>
+        )
+    }
+
+}
+
+function ByFieldFunc (props: PropsFunc)
 {
     const { row, tradeSecurity } = props;
     const {accuracy} = tradeSecurity;
-    const [isHovered, setIsHovered] = useState(false);
-    // const [position, setPosition] = useState('top');
-    const cellRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        if (isHovered && cellRef.current) {
-            const  rect = cellRef.current.getBoundingClientRect()
+    return <Tooltip
+        title={
+            <ButtonGroup size="small" sx={{backgroundColor: "white"}}>
+                <Button onClick={() => props.openApplication() }><OpenWithIcon/></Button>
+            </ButtonGroup>
         }
-    });
-
-
-    return <TableCell
-        ref={cellRef}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        align="center"
-        sx={{...getByCellColor(row),
-            position: "relative"
-        }}
+        placement={right}
     >
-        {(row.byFact ? row.byFact : row.byStart).toFixed(accuracy)}
-        {isHovered && (
-            <Box
-                sx={{
-                    position: 'absolute',
-                    top: 0,
-                    left: "50%",
-                    transform: "translate(-50%, -100%)",
-                    zIndex: 10,
-                }}
-            >
-                <ButtonGroup variant="contained" size="small">
-                    <Button>Просто кнопка</Button>
-                </ButtonGroup>
-            </Box>
-        )}
-    </TableCell>
+        <TableCell
+            align="center"
+            sx={getByCellColor(row)}
+        >
+            {(row.byFact ? row.byFact : row.byStart).toFixed(accuracy)}
+        </TableCell>
+    </Tooltip>
 }
 
 const getByCellColor = (row: Application) => {

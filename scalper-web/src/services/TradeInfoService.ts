@@ -16,6 +16,7 @@ export default function getAllTrades(): TradeSecurity[]
         trades: {
             downApplication: [
                 {
+                    id: 2,
                     order: 1,
                     status: AppStatus.ToClose,
                     byStart: 380.55,
@@ -35,6 +36,7 @@ export default function getAllTrades(): TradeSecurity[]
                     comment: "Сделка вниз не закрывать."
                 },
                 {
+                    id: 3,
                     order: 2,
                     status: AppStatus.Planned,
                     byStart: 382.65,
@@ -56,6 +58,7 @@ export default function getAllTrades(): TradeSecurity[]
             ],
             upApplication: [
                 {
+                    id: 4,
                     order: 1,
                     status: AppStatus.ToClose,
                     byStart: 396.50,
@@ -75,6 +78,7 @@ export default function getAllTrades(): TradeSecurity[]
                     comment: "Сделка вверх не закрывать."
                 },
                 {
+                    id: 5,
                     order: 2,
                     status: AppStatus.Planned,
                     byStart: 382.50,
@@ -96,6 +100,7 @@ export default function getAllTrades(): TradeSecurity[]
             ],
             history: [
                 {
+                    id: 6,
                     order: 1,
                     status: AppStatus.Result,
                     byStart: 389.95,
@@ -115,6 +120,7 @@ export default function getAllTrades(): TradeSecurity[]
                     comment: "закрыто"
                 },
                 {
+                    id: 7,
                     order: 2,
                     status: AppStatus.Result,
                     byStart: 395.65,

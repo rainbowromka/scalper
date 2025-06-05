@@ -97,6 +97,10 @@ export enum AppStatus {
 export interface Application
 {
     /**
+     * ID сделки.
+     */
+    id: number;
+    /**
      * Порядок сделок при отображении. Фактический определяется по ближайшей
      * сделке.
      */

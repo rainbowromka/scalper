@@ -2,6 +2,8 @@ import * as React from 'react';
 import AppStore from "../store/AppStore";
 import {inject, observer} from "mobx-react";
 import TradeSecurityComp from "../component/TradeSecurityComp";
+import TradeSecurityTotalComp from "../component/TradeSecurityTotalComp";
+import {Box} from "@mui/material";
 
 interface Props {
 }
@@ -38,8 +40,9 @@ export default class AppScreen extends React.Component<Props, State>
     }
 
     render() {
-        return <>
+        return <Box sx={{flexGrow: 1}}>
+            <TradeSecurityTotalComp/>
             <TradeSecurityComp/>
-        </>
+        </Box>
     }
 }

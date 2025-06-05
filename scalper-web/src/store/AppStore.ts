@@ -19,6 +19,7 @@ export default class AppStore
             UnblockUI: action,
             loadTradeInfo: action,
             addUpApplicationPlanned: action,
+            openApplication: action
         });
     }
 
@@ -43,11 +44,14 @@ export default class AppStore
 
         let lastApplication = {order:-1} as Application;
         let volume = 0;
+        let lastId: number = 0;
         upApplications.forEach(app => {
             if (app.order > lastApplication.order) {
                 lastApplication = app;
             }
             volume = volume + app.volume;
+
+            lastId = Math.max(app.id, lastId);
         });
         if (lastApplication.order === -1) return;
 
@@ -55,7 +59,7 @@ export default class AppStore
         {
             if (checkVolumes) {
                 checkVolumes();
-            };
+            }
             return;
         }
 
@@ -73,7 +77,9 @@ export default class AppStore
             (shellPlanned * (1 - margin) - byPlanned * (1 + margin))
             * minVolume)/ 0.01) * 0.01;
 
+        lastId++;
         let newApplication: Application = {
+            id: lastId,
             order: lastApplication.order + 1,
             status: AppStatus.Planned,
             byPlanned,
@@ -109,5 +115,24 @@ export default class AppStore
             (trade.id === tradeSecurity.id) ? {...trade,
                     maxApplicationsVolumes: trade.maxApplicationsVolumes + 1
                 } : trade));
+    }
+
+    openApplication = async (tId: string, rId: number) => {
+        this.tradeInfo = this.tradeInfo.map(trade => {
+            if (trade.id === tId) {
+                return {
+                    ...trade,
+                    trades: {...trade.trades, upApplication:
+                        trade.trades.upApplication.map(application => {
+                            if (application.id === rId) {
+                                return {...application,
+                                    status: AppStatus.ToOpen}
+                            }
+                            return application
+                        })
+                }}
+            }
+            return trade;
+        })
     }
 }
