@@ -13,22 +13,22 @@ import java.io.InputStream;
 @SpringBootApplication
 public class ScalperApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ScalperApplication.class, args);
-	}
-
-// TODO: 24.04.2025 спрятать это в тесты
-//	public static void main(String[] args) throws IOException
-//	{
-//		ConfigurableApplicationContext context = SpringApplication.run(ScalperApplication.class);
-//
-//		YandexDiskService yandexDiskService = context.getBean(YandexDiskService.class);
-//
-//		InputStream is = new FileInputStream("/home/perminovrp/2/auto.jpg");
-//		yandexDiskService.upload(is, "scalperTest/auto.jpg");
-//
+//	public static void main(String[] args) {
 //		SpringApplication.run(ScalperApplication.class, args);
 //	}
+
+// TODO: 24.04.2025 спрятать это в тесты
+	public static void main(String[] args) throws IOException
+	{
+		ConfigurableApplicationContext context = SpringApplication.run(ScalperApplication.class);
+
+		YandexDiskService yandexDiskService = context.getBean(YandexDiskService.class);
+
+		InputStream is = new FileInputStream("/home/developer/perminovrp/2/auto.jpg");
+		yandexDiskService.upload(is, "scalperTest/auto.jpg");
+
+		SpringApplication.run(ScalperApplication.class, args);
+	}
 }
 
 // TODO: 24.04.2025 План разработки.
