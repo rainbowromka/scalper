@@ -1,6 +1,6 @@
 import {AppStatus, TradeSecurity} from "../store/model/Model";
 
-export default function getAllTrades(): TradeSecurity[]
+export default async function getAllTrades(): Promise<TradeSecurity[]>
 {
     return  [{
         id: "ASTR",
@@ -39,6 +39,12 @@ export default function getAllTrades(): TradeSecurity[]
                     id: 3,
                     order: 2,
                     status: AppStatus.Planned,
+                    // status: AppStatus.Planned,
+                    // status: AppStatus.ToOpen,
+                    // status: AppStatus.Opened,
+                    // status: AppStatus.ToClose,
+                    // status: AppStatus.Closed,
+                    // status: AppStatus.Result,
                     byStart: 382.65,
                     byFact: null,
                     byDate: null,

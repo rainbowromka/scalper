@@ -1,11 +1,19 @@
 import {action, makeObservable, observable} from 'mobx';
-import {Application, AppStatus, Trades, TradeSecurity} from "./model/Model";
+import {
+    Application,
+    AppStatus,
+    SummaryCurrency,
+    Trades,
+    TradeSecurity
+} from "./model/Model";
 import getAllTrades from "../services/TradeInfoService";
+import getSummaryCurrency from "../services/SummaryCurrencyService";
 
 export default class AppStore
 {
 
     tradeInfo: TradeSecurity[] = [];
+    summaryCurrency: SummaryCurrency = {} as SummaryCurrency;
 
     // Блокировка главного экрана. Если заблокировано больше чем одним
     blockCount: number = 0;
@@ -15,11 +23,12 @@ export default class AppStore
     constructor() {
         makeObservable(this, {
             tradeInfo: observable,
+            summaryCurrency: observable,
             BlockUI: action,
             UnblockUI: action,
             loadTradeInfo: action,
             addUpApplicationPlanned: action,
-            openApplication: action
+            changeApplicationStatus: action,
         });
     }
 
@@ -107,7 +116,8 @@ export default class AppStore
 
 
     loadTradeInfo = async () => {
-        this.tradeInfo = getAllTrades();
+        this.summaryCurrency = await getSummaryCurrency();
+        this.tradeInfo = await getAllTrades();
     }
 
     increaseMaxVolumes = async (tradeSecurity: TradeSecurity) => {
@@ -117,7 +127,7 @@ export default class AppStore
                 } : trade));
     }
 
-    openApplication = async (tId: string, rId: number) => {
+    changeApplicationStatus = async (tId: string, rId: number, newStatus: AppStatus) => {
         this.tradeInfo = this.tradeInfo.map(trade => {
             if (trade.id === tId) {
                 return {
@@ -125,8 +135,7 @@ export default class AppStore
                     trades: {...trade.trades, upApplication:
                         trade.trades.upApplication.map(application => {
                             if (application.id === rId) {
-                                return {...application,
-                                    status: AppStatus.ToOpen}
+                                return {...application, status: newStatus }
                             }
                             return application
                         })

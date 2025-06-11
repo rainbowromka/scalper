@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-    Box,
     Paper,
     Table,
     TableBody,
@@ -9,40 +8,40 @@ import {
     TableHead,
     TableRow
 } from "@mui/material";
-
 import styles from "./ApplicationTable.module.css";
-
 import {
     Application,
     AppStatus,
-    Trades,
-    TradeSecurity
+    TradeSecurity,
+    TradeType
 } from "../store/model/Model";
 import ByField from "./cells/ByField";
 import {
-    styleCellDone, styleCellOpenPlanned, styleCellOpenToOpen,
+    styleCellDone,
+    styleCellOpenPlanned,
+    styleCellOpenToOpen,
     styleCellPlanned,
     styleCellShowPlaned
 } from "./cells/FieldStyles";
 
 interface Props
 {
+    tradeType: TradeType;
     tradeSecurity: TradeSecurity;
     applicationsRows: Application[];//Trades | null;
 }
 
 export default function ApplicationTable(props: Props)
 {
-    const { applicationsRows, tradeSecurity } = props;
+    const {tradeType, applicationsRows, tradeSecurity } = props;
     const {accuracy, accuracyCurrency} = tradeSecurity;
 
     const rows = applicationsRows.map((row) => (
-        <TableRow key={row.order} className={getRowColor(row)}>
+        <TableRow key={row.order} className={getRowColor(tradeType, row)}>
             <TableCell sx={getOrderColor(row)}>
-            {/*<TableCell className={classes.root}>*/}
                 {row.order}
             </TableCell>
-            <ByField tradeSecurity={tradeSecurity} row={row}/>
+            <ByField tradeSecurity={tradeSecurity} row={row} tradeType={tradeType}/>
             <TableCell align="center" sx={getPlannedColor(row)}>
                 {row.byPlanned.toFixed(accuracy)}
             </TableCell>
@@ -58,7 +57,7 @@ export default function ApplicationTable(props: Props)
             <TableCell align="center" sx={getPlannedColor(row)}>
                 {row.shellPlanned.toFixed(accuracy)}
             </TableCell>
-            <TableCell align="center" sx={getCloseColor(row)}>
+            <TableCell align="center" sx={getCloseColor(tradeType, row)}>
                 {(row.shellFact ? row.shellFact : row.shellStart).toFixed(accuracy)}
             </TableCell>
             <TableCell align="center" sx={getResultColor(row)}>
@@ -103,7 +102,7 @@ export default function ApplicationTable(props: Props)
     )
 }
 
-const getRowColor = (row: Application) => {
+const getRowColor = (type: TradeType, row: Application) => {
     switch (row.status)
     {
         case AppStatus.Planned:
@@ -129,21 +128,6 @@ const getOrderColor = (row: Application) => {
             return styleCellDone;
     }
 }
-
-// const getByCellColor = (row: Application) => {
-//     switch (row.status)
-//     {
-//         case AppStatus.Planned:
-//             return styleCellOpenPlanned;
-//         case AppStatus.ToOpen:
-//             return styleCellOpenToOpen
-//         case AppStatus.Opened:
-//         case AppStatus.ToClose:
-//         case AppStatus.Closed:
-//         case AppStatus.Result:
-//             return styleCellDone;
-//     }
-// }
 
 const getPlannedColor = (row: Application) => {
     switch (row.status)
@@ -173,19 +157,33 @@ const getVolumeColor = (row: Application) => {
     }
 }
 
-const getCloseColor = (row: Application) => {
-    switch (row.status)
-    {
-        case AppStatus.Planned:
-        case AppStatus.ToOpen:
-            return styleCellPlanned;
-        case AppStatus.Opened:
-            return styleCellOpenPlanned;
-        case AppStatus.ToClose:
-            return styleCellOpenToOpen;
-        case AppStatus.Closed:
-        case AppStatus.Result:
-            return styleCellDone;
+const getCloseColor = (type: TradeType, row: Application) => {
+    if (type === TradeType.up) {
+        switch (row.status) {
+            case AppStatus.Planned:
+            case AppStatus.ToOpen:
+                return styleCellPlanned;
+            case AppStatus.Opened:
+                return styleCellOpenPlanned;
+            case AppStatus.ToClose:
+                return styleCellOpenToOpen;
+            case AppStatus.Closed:
+            case AppStatus.Result:
+                return styleCellDone;
+        }
+    }
+    if (type === TradeType.down) {
+        switch (row.status) {
+            case AppStatus.Planned:
+                return styleCellOpenPlanned;
+            case AppStatus.ToOpen:
+                return styleCellOpenToOpen;
+            case AppStatus.Opened:
+            case AppStatus.ToClose:
+            case AppStatus.Closed:
+            case AppStatus.Result:
+                return styleCellDone;
+        }
     }
 }
 
@@ -204,30 +202,3 @@ const getResultColor = (row: Application) => {
     }
 }
 
-const getFontColor = (row: Application) => {
-    switch (row.status)
-    {
-        case AppStatus.Planned:
-        case AppStatus.ToOpen:
-        case AppStatus.Opened:
-        case AppStatus.ToClose:
-        case AppStatus.Closed:
-            return styleCellPlanned;
-        case AppStatus.Result:
-            return styleCellDone;
-    }
-}
-
-const getOrderStyle = (row: Application) => {
-    switch (row.status)
-    {
-        case AppStatus.Planned:
-        case AppStatus.ToOpen:
-        case AppStatus.Opened:
-        case AppStatus.ToClose:
-        case AppStatus.Closed:
-            return styleCellPlanned;
-        case AppStatus.Result:
-            return styleCellDone;
-    }
-}
