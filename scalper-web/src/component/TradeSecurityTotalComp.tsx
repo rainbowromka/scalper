@@ -3,13 +3,11 @@ import {
     AppBar,
     Box, Grid, IconButton,
     Toolbar,
-    Typography,
     useMediaQuery,
     useTheme
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import SummaryApplications from "./summaryheader/SummaryApplications";
-import SummaryResources from "./summaryheader/SummaryResources";
 
 export default class TradeSecurityTotalComp
 extends React.Component<any, any>
@@ -48,7 +46,6 @@ const TradeSecurityTotalFunc = () => {
                     <Toolbar ref={header}>
                         <Box sx={{flexGrow: 1}}>
                             <Grid container>
-                                <SummaryResources/>
                                 <SummaryApplications/>
                             </Grid>
                         </Box>

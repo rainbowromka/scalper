@@ -1,16 +1,17 @@
-import React, {useEffect, useRef} from "react";
+import React from "react";
 import {
     Box,
     Button,
-    ButtonGroup,
-    Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
-    IconButton,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
     Tab,
-    Tabs
+    Tabs,
 } from "@mui/material";
-import {TradeSecurity} from "../store/model/Model";
-import ApplicationTable from "./ApplicationTable";
-import AddIcon from '@mui/icons-material/Add';
+import {TradeSecurity, TradeType} from "../store/model/Model";
+import ApplicationsPanel from "./applications/ApplicationsPanel";
 
 function CustomTabPanel(props: {
     children?: React.ReactNode;
@@ -38,11 +39,6 @@ interface Props {
     addUpApplicationPlanned: (id: String, checkVolumes: (() => void) | null) => void;
     increaseMaxVolumes: (tradeSecurity: TradeSecurity) => void;
 }
-
-const allyProps= (id: String) =>  ({
-    id: `simple-tab-${id}`,
-    'aria-controls': `simple-tabpanel-${id}`
-});
 
 export default function TradeSecurityFunc(props:Props)
 {
@@ -96,31 +92,26 @@ export default function TradeSecurityFunc(props:Props)
                 <CustomTabPanel
                     value={tradeSecurity.id} index={tradeSecurity.id}
                 >
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'left',
-                            '& > *': {
-                                m: 1,
-                            },
-                        }}>
-                        <ButtonGroup
-                            variant="outlined"
-                            aria-label="управление торговлей"
-                        >
-                            <Button
-                                aria-label="Запланировать сделку"
-                                color="primary"
-                                onClick={() => addApplication(tradeSecurity)}
-                            >
-                                <AddIcon/>
-                            </Button>
-                        </ButtonGroup>
-                    </Box>
-                    <ApplicationTable
+                    <ApplicationsPanel
+                        title="Играем вниз"
+                        tradeType={TradeType.down}
                         tradeSecurity={tradeSecurity}
+                        addApplication={addApplication}
+                        applicationsRows={tradeSecurity.trades.downApplication}
+                    />
+                    <ApplicationsPanel
+                        title="Играем вверх"
+                        tradeType={TradeType.up}
+                        tradeSecurity={tradeSecurity}
+                        addApplication={addApplication}
                         applicationsRows={tradeSecurity.trades.upApplication}
+                    />
+                    <ApplicationsPanel
+                        title="История сделок"
+                        tradeType={TradeType.history}
+                        tradeSecurity={tradeSecurity}
+                        addApplication={addApplication}
+                        applicationsRows={tradeSecurity.trades.history}
                     />
                 </CustomTabPanel>
             ))}

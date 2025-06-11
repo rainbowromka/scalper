@@ -1,3 +1,32 @@
+export interface SummaryCurrency {
+    /**
+     * Всего вложено активов.
+     */
+    foundsInvested: number;
+    /**
+     * Стоимость всех активов.
+     */
+    valueAllAssets: number;
+    /**
+     * Зарезервировано.
+     */
+    reserved: number;
+    /**
+     * Остаток средсв.
+     */
+    balanceOfFounds: number;
+    /**
+     * Свободные средства.
+     */
+    freeCurrency: number;
+    /**
+     * Изменения.
+     */
+    lastChange: number;
+}
+
+
+
 export interface TradeSecurity {
      /**
      * ID актива 4 - буквы. Например ASTR
@@ -62,6 +91,21 @@ export interface Trades {
      * Совершённые сделки.
      */
     history: Application[];
+}
+
+export enum TradeType {
+    /**
+     * Торговля вверх.
+     */
+    up,
+    /**
+     * Торговля вниз.
+     */
+    down,
+    /**
+     * История.
+     */
+    history
 }
 
 // Статусы заявок.
